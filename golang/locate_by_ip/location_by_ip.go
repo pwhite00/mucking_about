@@ -1,6 +1,8 @@
 package main
 
 // writing this to get used to calling a web api with golang
+// woohoo first real golang script. -pwhite 6212017
+// version 1.0
 
 import (
 	"encoding/json"
@@ -9,7 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
+	//"reflect"     // only uncomment for tests using debug section in main.
 	"time"
 )
 
@@ -28,54 +30,69 @@ type details struct {
 }
 
 func main() {
+	// this is flag; it works like optparse in other language note; ip == -ip flag, none == default value, usage well usage
+	// call help using -h or -help. note calling help will exit with 2.
 	ipaddress := flag.String("ip", "none", "Enter an IP address to trace or defaults to current IP in use.")
 	flag.Parse()
 
-	fmt.Print("ip:", *ipaddress, "\n")
-	if *ipaddress == "none" {
-		fmt.Println("it's nothing really.")
-	} else {
-		fmt.Println("I'm pretty sure it's comething actually.")
-	}
+	// This is the debugging section to work out if conditions as well as using strings stored in flag.
+	//fmt.Print("ip:", *ipaddress, "\n")
+	//if *ipaddress == "none" {
+	//	fmt.Println("it's nothing really.")
+	//	fmt.Println(reflect.TypeOf(*ipaddress))
+	//	fmt.Println("https://freegeoip.net/json/")
+	//} else {
+	//	fmt.Println("I'm pretty sure it's something actually.")
+	//	fmt.Println(reflect.TypeOf(*ipaddress))
+	//	fmt.Println("https://freegeoip.net/json/" + *ipaddress)
+	//	thing := "https://freegeoip.net/json/" + *ipaddress
+	//	fmt.Println(thing)
+	//}
+
+	// this if statement checks if an IP was manualy passed in. It will change the URL used to
+	// allow the script to target the passed in IP vs the current one the node is using.
 	if *ipaddress == "none" {
 		url := "https://freegeoip.net/json/"
 		call_api(url)
 	} else {
-		combined_info := strings.Join("https://freegeoip.net/json/", *ipaddress)
-		url := combined_info
+		url := "https://freegeoip.net/json/" + *ipaddress
 		call_api(url)
 	}
 }
 
 func call_api(url string) {
 	// call freegeoip.net/json/ and get data on location
+
+	// define the http.Client and set a timeout
 	locationClient := http.Client{
 		Timeout: time.Second * 2, // 2 second max
 	}
 
+	// make the http get call to the api and check if errors occur, report them if them do.
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	// define a keyvalue pair - find out more about this one.
 	req.Header.Set("User-Agent", "location-data")
 
+	// check the response from the api and repo errors
 	res, getErr := locationClient.Do(req)
 	if getErr != nil {
 		log.Fatal(getErr)
 	}
-
+	// read the output from the api and report errors
 	body, readErr := ioutil.ReadAll(res.Body)
 	if readErr != nil {
 		log.Fatal(readErr)
 	}
-
+	// do some json munching of the data and report errors
 	details1 := details{}
 	jsonErr := json.Unmarshal(body, &details1)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
 
+	// write the json output. normally in a more interesting way.
 	fmt.Println(details1)
-
 }
