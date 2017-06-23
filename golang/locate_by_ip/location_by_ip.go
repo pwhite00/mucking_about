@@ -94,5 +94,8 @@ func call_api(url string) {
 	}
 
 	// write the json output. normally in a more interesting way.
-	fmt.Println(details1)
+	fmt.Println("Ipaddress", details1.Ipaddress)
+	fmt.Println(details1.City, ",", details1.Region_name, ",", details1.Country_name)
+	fmt.Println("Latitude:", details1.Latitude, "Longitude:", details1.Longitude)
+
 }
