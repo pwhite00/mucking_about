@@ -99,5 +99,4 @@ func call_api(url string) {
 	fmt.Println(details1.City, ",", details1.Region_name, ",", details1.Country_name)
 	fmt.Println("Zip code:", details1.Zip_code, "Time Zone:", details1.Time_zone, "Metro_Code:", details1.Metro_Code)
 	fmt.Println("Latitude:", details1.Latitude, "Longitude:", details1.Longitude)
-
 }
