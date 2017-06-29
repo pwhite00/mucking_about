@@ -1,0 +1,11 @@
+# not sure about formatting for this but for now a list pf python modules to investigatre.
+requests
+paramiko
+fabric
+io
+sys
+json
+pyyaml
+subprocess
+# some time module perferabley with time zones and dst
+# secrets encruption and no echoing passwords
