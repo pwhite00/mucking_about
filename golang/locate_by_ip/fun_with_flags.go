@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"reflect"
 )
 
 func main() {
@@ -20,6 +21,7 @@ func main() {
 	fmt.Println("fork:", *boolPtr)
 	fmt.Println("svar:", svar)
 	fmt.Println("tail:", flag.Args())
+	fmt.Println("object", reflect.TypeOf(flag.Args()))cd ../../
 
 	if *boolPtr == true {
 		fmt.Println("it's true !")
