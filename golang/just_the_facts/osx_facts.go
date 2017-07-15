@@ -14,6 +14,8 @@ func osxFacts() {
 	getOsxFQDN()
 	getOsxSerialNumber()
 	getOsxUptime()
+	getOsxInterfaces()
+	getOsxPrimaryNetworkInfo() // work out how to deal with dynamic primary interfaces
 }
 
 func getOsxHostname() {
@@ -59,12 +61,40 @@ func getOsxUptime() {
 }
 
 func getOsxInterfaces() {
-	fmt.Println("Not yet implemented.")
+	all_net_interfaces, err := exec.Command("ifconfig", "-l").Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%s\n", all_net_interfaces)
+}
 
+//func getOsxPrimaryNetworkInfo(net_interface string) {
+func getOsxPrimaryNetworkInfo() {
+	//primary_network_info, err := exec.Command("ifconfig", net_interface)
+	primary_network_info, err := exec.Command("ifconfig", "en0").Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(primary_network_info))
+	// parse the putput to be like:
+	// en0:
+	// IP: X.X.X.X
+	// NM: Y.Y.Y.Y
+	// GW: Z.Z.Z.Z
+	// MAC: aa:aa:aa:aa:aa:aa:aa
 }
 
 func getOsxIpAddress() {
-	fmt.Println("Not yet implemented.")
+	primary_ip, err := exec.Command("ifconfig", "en0").Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+
+
+	//fmt.Println(string(hostname_fqdn))
+
+
 
 }
 
