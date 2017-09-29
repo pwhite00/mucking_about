@@ -1,5 +1,6 @@
 //You Must Define Package on first line.
-package Day_3
+//package Day_3
+package main
 
 import (
 	"fmt"
